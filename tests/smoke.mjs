@@ -3,45 +3,64 @@ import fs from "node:fs";
 import { createRequire } from "node:module";
 
 const require = createRequire(import.meta.url);
-const { CAPABILITIES, POLICIES, evaluateEnvelope, formatEnvelope } = require("../assets/app.js");
-const home = fs.readFileSync(new URL("../index.html", import.meta.url), "utf8");
-const acquisition = fs.readFileSync(new URL("../acquire/index.html", import.meta.url), "utf8");
-const sitemap = fs.readFileSync(new URL("../sitemap.xml", import.meta.url), "utf8");
-const robots = fs.readFileSync(new URL("../robots.txt", import.meta.url), "utf8");
-const script = fs.readFileSync(new URL("../assets/app.js", import.meta.url), "utf8");
-const readme = fs.readFileSync(new URL("../README.md", import.meta.url), "utf8");
+const { CAPABILITIES, DEFAULT, STATES, nextState, countStates, applyPreset } = require("../assets/app.js");
+const read = path => fs.readFileSync(new URL("../" + path, import.meta.url));
+const home = read("index.html").toString();
+const acquire = read("acquire/index.html").toString();
+const sitemap = read("sitemap.xml").toString();
+const robots = read("robots.txt").toString();
+const script = read("assets/app.js").toString();
+const readme = read("README.md").toString();
+const png = read("assets/social-card.png");
 
-for (const id of ["thesis", "framework", "workbench", "evidence", "capability-catalog", "policy-select", "result-text"]) {
-  assert.ok(home.includes('id="' + id + '"'), "Missing home element " + id);
+for (const id of ["register", "capability-grid", "thesis", "model", "levels", "evidence", "preset-mask", "preset-scoped", "preset-reset"]) {
+  assert.ok(home.includes('id="' + id + '"'), "Missing element " + id);
 }
-assert.match(home, /Maskable Superintelligence|Superintelligence/);
-assert.match(readme, /Maskable.*Superintelligence/);
-assert.doesNotMatch(home + readme + acquisition, /MaskableSI\.com/i, "Do not publicly connect the separate name");
-assert.match(home, /<html lang="en">/);
+assert.match(home, /Possession is/);
+assert.match(home, /not permission/);
+assert.match(home, /Superintelligence/);
+assert.match(home, /Grant\. Enforce\. Verify\./);
+assert.match(home, /Maskability levels/);
+assert.match(home, /A proposed control principle|proposed capability-governance concept|proposed vocabulary/i);
+assert.doesNotMatch(home + readme + acquire, /MaskableSI\.com/i);
 assert.match(home, /rel="canonical" href="https:\/\/maskable\.si\//);
 assert.match(home, /name="description"/);
-assert.match(home, /AI Risk Management Framework/);
-assert.match(home, /AI Security Institute|frontier-AI misuse safeguards/);
-assert.match(acquisition, /noindex, follow/);
+assert.match(home, /<html lang="en">/);
+
+// Social platform unfurling: accessible HTTPS image with explicit 1200x630 PNG metadata.
+assert.match(home, /property="og:image" content="https:\/\/maskable\.si\/assets\/social-card\.png"/);
+assert.match(home, /property="og:image:type" content="image\/png"/);
+assert.match(home, /property="og:image:width" content="1200"/);
+assert.match(home, /property="og:image:height" content="630"/);
+assert.match(home, /property="og:image:alt"/);
+assert.match(home, /name="twitter:card" content="summary_large_image"/);
+assert.match(home, /name="twitter:image" content="https:\/\/maskable\.si\/assets\/social-card\.png"/);
+assert.equal(png.readUInt32BE(16), 1200);
+assert.equal(png.readUInt32BE(20), 630);
+assert.equal(png.subarray(1, 4).toString(), "PNG");
+
+// Acquisition remains informational and not indexed; escrow is strictly optional.
+assert.match(acquire, /noindex, follow/);
+assert.match(acquire, /escrow provider/i);
+assert.match(acquire, /mutually agreed/i);
+assert.match(acquire, /escrow\.com\/domains\/how-it-works/);
+assert.match(acquire, /No escrow transaction has been initiated/);
 assert.doesNotMatch(sitemap, /acquire/);
 assert.match(robots, /Allow: \/\s/);
 assert.doesNotMatch(robots, /Disallow: \/acquire\//);
+
+// Transparent, fully local UI simulation with no telemetry or real actuation.
+assert.equal(CAPABILITIES.length, 12);
+assert.equal(new Set(CAPABILITIES.map(x => x.id)).size, 12);
+assert.deepEqual(STATES, ["masked", "review", "exposed"]);
+assert.equal(nextState("masked"), "review");
+assert.equal(nextState("review"), "exposed");
+assert.equal(nextState("exposed"), "masked");
+assert.deepEqual(countStates(DEFAULT), { masked: 7, review: 3, exposed: 2 });
+assert.deepEqual(countStates(applyPreset("mask")), { masked: 12, review: 0, exposed: 0 });
+assert.deepEqual(countStates(applyPreset("scoped")), { masked: 8, review: 3, exposed: 1 });
+assert.deepEqual(applyPreset("reset"), DEFAULT);
+assert.equal(Object.keys(applyPreset("reset")).length, 12);
 assert.doesNotMatch(script, /fetch\s*\(|XMLHttpRequest|sendBeacon|localStorage|sessionStorage/);
 
-assert.equal(CAPABILITIES.length, 6);
-assert.deepEqual(Object.keys(POLICIES).sort(), ["isolated", "research", "reviewed"]);
-
-const research = evaluateEnvelope("research");
-assert.deepEqual([research.available, research.reviewed, research.withheld], [3, 0, 3]);
-assert.equal(research.decisions.find(x => x.id === "credentials").status, "WITHHELD");
-const reviewed = evaluateEnvelope("reviewed");
-assert.deepEqual([reviewed.available, reviewed.reviewed, reviewed.withheld], [3, 2, 1]);
-assert.equal(reviewed.decisions.find(x => x.id === "act").status, "REVIEW REQUIRED");
-const isolated = evaluateEnvelope("isolated");
-assert.deepEqual([isolated.available, isolated.reviewed, isolated.withheld], [2, 0, 4]);
-assert.equal(isolated.decisions.find(x => x.id === "retrieve").status, "WITHHELD");
-assert.deepEqual(evaluateEnvelope("unknown"), research);
-assert.match(formatEnvelope(research), /ILLUSTRATION ONLY/);
-assert.match(formatEnvelope(isolated), /ISOLATED \/ OFFLINE/);
-
-console.log("PASS: superintelligence positioning, domain isolation, discovery policy, no network/storage, 3 capability envelopes");
+console.log("PASS: 12-capability register, social PNG metadata, noindex acquisition, optional escrow, local-only operation");

@@ -1,1 +1,28 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630"><rect width="1200" height="630" fill="#080e15"/><circle cx="1040" cy="55" r="410" fill="#173C34" opacity=".52"/><path d="M0 505h1200M0 360h1200M200 0v630M650 0v630M1050 0v630" stroke="#244036" opacity=".34"/><rect x="76" y="70" width="80" height="80" rx="18" fill="#B6EDCC"/><path d="M95 126V94h10l11 15 11-15h10v32h-10v-16l-11 15-11-15v16H95Z" fill="#0A1D19"/><text x="180" y="124" font-family="Arial,sans-serif" font-size="44" font-weight="700" fill="#F1F6F3">maskable<tspan fill="#B6EDCC">.</tspan></text><text x="76" y="282" font-family="Arial,sans-serif" font-size="74" font-weight="700" fill="#F1F6F3">Superintelligence.</text><text x="76" y="379" font-family="Arial,sans-serif" font-size="76" font-weight="700" fill="#B6EDCC">With boundaries.</text><text x="78" y="498" font-family="Arial,sans-serif" font-size="24" fill="#98AEA6">MASKABLE SUPERINTELLIGENCE · FUTURE-FACING CONCEPT</text><text x="78" y="576" font-family="monospace" font-size="17" fill="#6B8479">MASKABLE.SI / SOHADOT</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<rect width="1200" height="630" fill="#f8f7f4"/>
+<rect y="0" width="1200" height="12" fill="#c84a1d"/>
+<rect x="72" y="59" width="43" height="43" rx="3" fill="#191a19"/>
+<path d="M80 91V69h7l7 11 7-11h7v22h-7V79l-7 10-7-10v12H80Z" fill="#f8f7f4"/>
+<circle cx="109" cy="92" r="3.6" fill="#c84a1d"/>
+<text x="134" y="87" font-family="DejaVu Sans,sans-serif" font-size="25" font-weight="700" fill="#1c1c1a">MASKABLE.SI</text>
+<text x="74" y="157" font-family="DejaVu Sans,sans-serif" font-size="15" letter-spacing="2" fill="#b6411a">MASKABLE SUPERINTELLIGENCE  /  INDEPENDENT CONCEPT</text>
+<text x="68" y="279" font-family="DejaVu Sans,sans-serif" font-size="68" font-weight="700" letter-spacing="-3" fill="#191a19">Possession is</text>
+<text x="68" y="366" font-family="DejaVu Sans,sans-serif" font-size="68" font-weight="700" letter-spacing="-3" fill="#191a19">not permission<tspan fill="#c84a1d">.</tspan></text>
+<text x="74" y="435" font-family="DejaVu Sans,sans-serif" font-size="19" fill="#74766f">Capability is a fact. Permission is a decision.</text>
+<rect x="749" y="179" width="378" height="262" fill="#efeee9" stroke="#dbd9d3"/>
+<text x="771" y="204" font-family="DejaVu Sans,sans-serif" font-size="12" fill="#585b55" letter-spacing="2">CAPABILITY / MASK REGISTER</text>
+<g font-family="DejaVu Sans,sans-serif" font-size="12" fill="#2c302c">
+  <rect x="773" y="221" width="101" height="55" fill="#fbfaf7" stroke="#d8d7d1"/><text x="784" y="243">Compute</text><text x="784" y="264" fill="#bc4b1a">REVIEW</text>
+  <rect x="874" y="221" width="101" height="55" fill="#fbfaf7" stroke="#d8d7d1"/><text x="885" y="243">Network</text><text x="885" y="264" fill="#bc4b1a">EXPOSED</text>
+  <rect x="975" y="221" width="130" height="55" fill="#22221f"/><text x="987" y="243" fill="#ffffff">Delegation</text><text x="987" y="264" fill="#efbba8">MASKED</text>
+  <rect x="773" y="276" width="101" height="55" fill="#22221f"/><text x="784" y="298" fill="#ffffff">Credentials</text><text x="784" y="319" fill="#efbba8">MASKED</text>
+  <rect x="874" y="276" width="101" height="55" fill="#fbfaf7" stroke="#d8d7d1"/><text x="885" y="298">Tools</text><text x="885" y="319" fill="#bc4b1a">REVIEW</text>
+  <rect x="975" y="276" width="130" height="55" fill="#22221f"/><text x="987" y="298" fill="#ffffff">Deployment</text><text x="987" y="319" fill="#efbba8">MASKED</text>
+</g>
+<rect x="773" y="345" width="332" height="66" fill="#c84a1d"/>
+<text x="790" y="369" font-family="DejaVu Sans,sans-serif" font-size="11" fill="#f9d5c7" letter-spacing="1">POLICY / AUTHORITY / EVIDENCE</text>
+<text x="790" y="393" font-family="DejaVu Sans,sans-serif" font-size="17" font-weight="700" fill="#ffffff">Grant. Enforce. Verify.</text>
+<path d="M72 520H1128" stroke="#deded8"/>
+<text x="74" y="558" font-family="DejaVu Sans,sans-serif" font-size="14" fill="#656963">A proposed control principle for advanced AI capabilities.</text>
+<text x="927" y="557" font-family="DejaVu Sans,sans-serif" font-size="13" fill="#a33d1c">MASKABLE.SI  /  SOHADOT</text>
+</svg>

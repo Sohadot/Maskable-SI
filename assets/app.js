@@ -1,117 +1,118 @@
-/*
- * Maskable Superintelligence: interactive capability-envelope concept.
- * Purely illustrative policy mapping; no AI model, security enforcement,
- * external calls, data collection or persistence.
+/**
+ * Capability Mask Register — educational UI simulation only.
+ * No model, authorization server, real-world enforcement, telemetry,
+ * network requests, storage, or access to operating-system capabilities.
  */
 (function () {
   "use strict";
-  const CAPABILITIES = [
-    { id: "reason", label: "Analytical reasoning" },
-    { id: "retrieve", label: "Public information retrieval" },
-    { id: "compute", label: "Sandboxed computation" },
-    { id: "act", label: "External system actions" },
-    { id: "credentials", label: "Credential access" },
-    { id: "delegate", label: "Autonomous delegation" }
-  ];
 
-  const POLICIES = {
-    research: {
-      title: "RESEARCH / SCOPED",
-      allow: ["reason", "retrieve", "compute"],
-      review: [],
-      help: "Scoped research offers analysis, public retrieval and sandboxed computation; higher-impact actions remain withheld."
-    },
-    reviewed: {
-      title: "OPERATIONS / HUMAN REVIEW",
-      allow: ["reason", "retrieve", "compute"],
-      review: ["act", "delegate"],
-      help: "Reviewed operations put external actions and delegation behind hypothetical explicit human approval; credentials remain withheld."
-    },
-    isolated: {
-      title: "ISOLATED / OFFLINE",
-      allow: ["reason", "compute"],
-      review: [],
-      help: "Isolated analysis grants reasoning and sandboxed computation only. External access, privileged actions and delegation are withheld."
+  const CAPABILITIES = Object.freeze([
+    { id: "code", name: "Code execution" },
+    { id: "network", name: "Network access" },
+    { id: "tools", name: "Tool invocation" },
+    { id: "memory", name: "Persistent memory" },
+    { id: "delegation", name: "Autonomous delegation" },
+    { id: "physical", name: "Physical actuation" },
+    { id: "self_mod", name: "Self-modification" },
+    { id: "authorization", name: "Self-authorization" },
+    { id: "identity", name: "Credential use" },
+    { id: "external", name: "External write" },
+    { id: "resources", name: "Resource acquisition" },
+    { id: "deployment", name: "Model deployment" }
+  ]);
+
+  const STATES = Object.freeze(["masked", "review", "exposed"]);
+  const DEFAULT = Object.freeze({
+    code: "review",
+    network: "exposed",
+    tools: "review",
+    memory: "exposed",
+    delegation: "masked",
+    physical: "masked",
+    self_mod: "masked",
+    authorization: "masked",
+    identity: "masked",
+    external: "review",
+    resources: "masked",
+    deployment: "masked"
+  });
+  const SCOPED = Object.freeze({
+    ...Object.fromEntries(CAPABILITIES.map(({ id }) => [id, "masked"])),
+    code: "exposed",
+    network: "review",
+    tools: "review",
+    memory: "review"
+  });
+
+  function nextState(state) {
+    const index = STATES.indexOf(state);
+    return STATES[(index + 1) % STATES.length];
+  }
+  function countStates(register) {
+    const counts = { masked: 0, review: 0, exposed: 0 };
+    for (const capability of CAPABILITIES) {
+      const state = register[capability.id];
+      if (Object.prototype.hasOwnProperty.call(counts, state)) counts[state] += 1;
     }
-  };
-
-  function evaluateEnvelope(policyName = "research") {
-    const policy = POLICIES[policyName] || POLICIES.research;
-    const decisions = CAPABILITIES.map((capability) => ({
-      ...capability,
-      status: policy.allow.includes(capability.id)
-        ? "AVAILABLE"
-        : policy.review.includes(capability.id)
-          ? "REVIEW REQUIRED"
-          : "WITHHELD"
-    }));
-    return {
-      title: policy.title,
-      decisions,
-      withheld: decisions.filter(item => item.status === "WITHHELD").length,
-      reviewed: decisions.filter(item => item.status === "REVIEW REQUIRED").length,
-      available: decisions.filter(item => item.status === "AVAILABLE").length
-    };
+    return counts;
+  }
+  function applyPreset(name) {
+    if (name === "mask") return Object.fromEntries(CAPABILITIES.map(({ id }) => [id, "masked"]));
+    if (name === "scoped") return { ...SCOPED };
+    return { ...DEFAULT };
   }
 
-  function formatEnvelope(envelope) {
-    return [
-      "CAPABILITY ENVELOPE",
-      envelope.title,
-      "────────────────────────────────",
-      ...envelope.decisions.map((item) => {
-        const pad = " ".repeat(Math.max(1, 30 - item.label.length));
-        return item.label + pad + item.status;
-      }),
-      "────────────────────────────────",
-      "ILLUSTRATION ONLY · NO ENFORCEMENT"
-    ].join("\n");
-  }
+  function initRegister() {
+    const grid = document.getElementById("capability-grid");
+    const countMasked = document.getElementById("count-masked");
+    const countReview = document.getElementById("count-review");
+    const countExposed = document.getElementById("count-exposed");
+    if (!grid || !countMasked || !countReview || !countExposed) return;
 
-  function setup() {
-    const chooser = document.getElementById("policy-select");
-    const output = document.getElementById("result-text");
-    const help = document.getElementById("policy-help");
-    const count = document.getElementById("detected-count");
-    const withheld = document.getElementById("masked-count");
-    const reset = document.getElementById("load-sample");
-    const copy = document.getElementById("copy-output");
-    if (!chooser || !output || !help || !count || !withheld || !reset || !copy) return;
+    let state = applyPreset("reset");
+    const buttons = new Map();
+    for (const item of CAPABILITIES) {
+      const button = grid.querySelector('[data-id="' + item.id + '"]');
+      if (!button) continue;
+      buttons.set(item.id, button);
+      button.addEventListener("click", () => {
+        state = { ...state, [item.id]: nextState(state[item.id]) };
+        render();
+      });
+    }
 
     function render() {
-      const envelope = evaluateEnvelope(chooser.value);
-      output.textContent = formatEnvelope(envelope);
-      help.textContent = (POLICIES[chooser.value] || POLICIES.research).help;
-      count.textContent = String(envelope.decisions.length);
-      withheld.textContent = String(envelope.withheld);
-      copy.textContent = "Copy envelope ↗";
+      for (const item of CAPABILITIES) {
+        const button = buttons.get(item.id);
+        if (!button) continue;
+        const status = state[item.id];
+        button.classList.remove("state-masked", "state-review", "state-exposed");
+        button.classList.add("state-" + status);
+        button.querySelector(".cap-status").textContent = status === "review" ? "REVIEW" : status.toUpperCase();
+        button.setAttribute("aria-label", item.name + ": " + (status === "review" ? "review required" : status) + ". Activate to change the simulated permission state.");
+        button.title = item.name + " — " + (status === "review" ? "Review required" : status);
+      }
+      const counts = countStates(state);
+      countMasked.textContent = String(counts.masked);
+      countReview.textContent = String(counts.review);
+      countExposed.textContent = String(counts.exposed);
     }
-    chooser.addEventListener("change", render);
-    reset.addEventListener("click", () => {
-      chooser.value = "research";
-      render();
-      chooser.focus();
-    });
-    copy.addEventListener("click", async () => {
-      if (!navigator.clipboard?.writeText) {
-        copy.textContent = "Clipboard unavailable";
-        return;
-      }
-      try {
-        await navigator.clipboard.writeText(output.textContent);
-        copy.textContent = "Copied ✓";
-      } catch {
-        copy.textContent = "Copy unavailable";
-      }
-    });
+
+    const presets = { "preset-mask": "mask", "preset-scoped": "scoped", "preset-reset": "reset" };
+    for (const [buttonId, preset] of Object.entries(presets)) {
+      document.getElementById(buttonId)?.addEventListener("click", () => {
+        state = applyPreset(preset);
+        render();
+      });
+    }
     render();
   }
 
   if (typeof module !== "undefined" && module.exports) {
-    module.exports = { CAPABILITIES, POLICIES, evaluateEnvelope, formatEnvelope };
+    module.exports = { CAPABILITIES, STATES, DEFAULT, SCOPED, nextState, countStates, applyPreset };
   }
   if (typeof document !== "undefined") {
-    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", setup);
-    else setup();
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initRegister);
+    else initRegister();
   }
 })();
