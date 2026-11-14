@@ -6,6 +6,8 @@ const require = createRequire(import.meta.url);
 const { CAPABILITIES, DEFAULT, STATES, nextState, countStates, applyPreset } = require("../assets/app.js");
 const read = path => fs.readFileSync(new URL("../" + path, import.meta.url));
 const home = read("index.html").toString();
+const reference = read("maskability/index.html").toString();
+const contract = JSON.parse(read("maskability/contract.v0.1.json").toString());
 const acquire = read("acquire/index.html").toString();
 const sitemap = read("sitemap.xml").toString();
 const robots = read("robots.txt").toString();
@@ -26,6 +28,23 @@ assert.doesNotMatch(home + readme + acquire, /MaskableSI\.com/i);
 assert.match(home, /rel="canonical" href="https:\/\/maskable\.si\//);
 assert.match(home, /name="description"/);
 assert.match(home, /<html lang="en">/);
+assert.match(home, /href="\/maskability\/"/);
+
+// A separately indexable, accurate, substantive technical reference.
+assert.match(reference, /<html lang="en">/);
+assert.match(reference, /rel="canonical" href="https:\/\/maskable\.si\/maskability\/"/);
+assert.match(reference, /What Is Maskability\?/);
+assert.match(reference, /proposed|proposal/i);
+assert.match(reference, /not an industry standard/i);
+assert.match(reference, /No ability to erase, hide or suppress a model/);
+assert.match(reference, /not test tool interception/i);
+assert.match(reference, /contract\.v0\.1\.json/);
+assert.match(reference, /og:image/);
+assert.ok(reference.length > 9000, "Reference must contain substantial independently usable detail");
+assert.match(sitemap, /https:\/\/maskable\.si\/maskability\//);
+assert.equal(contract.cases.length, 8);
+assert.equal(contract.status, "independent_proposal_not_standard");
+assert.doesNotMatch(reference + JSON.stringify(contract), /MaskableSI\.com/i);
 
 // Social platform unfurling: accessible HTTPS image with explicit 1200x630 PNG metadata.
 assert.match(home, /property="og:image" content="https:\/\/maskable\.si\/assets\/social-card\.png"/);

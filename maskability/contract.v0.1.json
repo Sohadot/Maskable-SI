@@ -1,0 +1,83 @@
+{
+  "id": "MASKABILITY-REFERENCE-0.1",
+  "title": "Maskability: a proposed operational reference for external AI action boundaries",
+  "author": "Sohadot / Maskable.si",
+  "status": "independent_proposal_not_standard",
+  "scope": "Illustrative decisions at a hypothetical external action boundary only",
+  "non_claims": [
+    "No control of model-internal knowledge or reasoning",
+    "No deployed runtime enforcement or secure identity verification",
+    "No independently verified revocation or bypass resistance",
+    "No security certification or production suitability"
+  ],
+  "request_fields": ["actor", "capability", "operation", "resource", "scope", "delegationDepth"],
+  "trusted_context_fields": ["now", "verifiedApprovals"],
+  "policy_grant_fields": ["id", "actor", "capability", "operation", "resource", "scope", "expiresAt", "maxDelegationDepth", "requiresApproval"],
+  "outcomes": ["DENY", "REVIEW", "ALLOW"],
+  "cases": [
+    {
+      "id": "MSI-01",
+      "description": "An unmatched external write must not acquire authority",
+      "request": {"actor": "agent-a", "capability": "documents", "operation": "write", "resource": "doc-1", "scope": "project-a", "delegationDepth": 0},
+      "policy": {"grants": []},
+      "trustedContext": {"now": 1000, "verifiedApprovals": []},
+      "expected": {"decision": "DENY", "reason": "NO_MATCHING_GRANT"}
+    },
+    {
+      "id": "MSI-02",
+      "description": "An exact scoped read can be allowed",
+      "request": {"actor": "agent-a", "capability": "documents", "operation": "read", "resource": "doc-1", "scope": "project-a", "delegationDepth": 0},
+      "policy": {"grants": [{"id": "GRANT-READ-A", "actor": "agent-a", "capability": "documents", "operation": "read", "resource": "doc-1", "scope": "project-a", "expiresAt": 2000, "maxDelegationDepth": 0, "requiresApproval": false}]},
+      "trustedContext": {"now": 1000, "verifiedApprovals": []},
+      "expected": {"decision": "ALLOW", "reason": "MATCHING_GRANT"}
+    },
+    {
+      "id": "MSI-03",
+      "description": "An unrelated project must not inherit an existing grant",
+      "request": {"actor": "agent-a", "capability": "documents", "operation": "read", "resource": "doc-1", "scope": "project-b", "delegationDepth": 0},
+      "policy": {"grants": [{"id": "GRANT-READ-A", "actor": "agent-a", "capability": "documents", "operation": "read", "resource": "doc-1", "scope": "project-a", "expiresAt": 2000, "maxDelegationDepth": 0, "requiresApproval": false}]},
+      "trustedContext": {"now": 1000, "verifiedApprovals": []},
+      "expected": {"decision": "DENY", "reason": "NO_MATCHING_GRANT"}
+    },
+    {
+      "id": "MSI-04",
+      "description": "A bounded write must remain pending without separate approval",
+      "request": {"actor": "agent-a", "capability": "documents", "operation": "write", "resource": "doc-1", "scope": "project-a", "delegationDepth": 0, "approved": true},
+      "policy": {"grants": [{"id": "GRANT-WRITE-A", "actor": "agent-a", "capability": "documents", "operation": "write", "resource": "doc-1", "scope": "project-a", "expiresAt": 2000, "maxDelegationDepth": 0, "requiresApproval": true}]},
+      "trustedContext": {"now": 1000, "verifiedApprovals": []},
+      "expected": {"decision": "REVIEW", "reason": "VERIFIED_APPROVAL_REQUIRED"}
+    },
+    {
+      "id": "MSI-05",
+      "description": "An expired scoped grant cannot be used",
+      "request": {"actor": "agent-a", "capability": "documents", "operation": "read", "resource": "doc-1", "scope": "project-a", "delegationDepth": 0},
+      "policy": {"grants": [{"id": "GRANT-READ-A", "actor": "agent-a", "capability": "documents", "operation": "read", "resource": "doc-1", "scope": "project-a", "expiresAt": 2000, "maxDelegationDepth": 0, "requiresApproval": false}]},
+      "trustedContext": {"now": 2000, "verifiedApprovals": []},
+      "expected": {"decision": "DENY", "reason": "EXPIRED_GRANT"}
+    },
+    {
+      "id": "MSI-06",
+      "description": "Delegation beyond a grant's authorized depth must be denied",
+      "request": {"actor": "agent-a", "capability": "documents", "operation": "read", "resource": "doc-1", "scope": "project-a", "delegationDepth": 2},
+      "policy": {"grants": [{"id": "GRANT-READ-A", "actor": "agent-a", "capability": "documents", "operation": "read", "resource": "doc-1", "scope": "project-a", "expiresAt": 2000, "maxDelegationDepth": 1, "requiresApproval": false}]},
+      "trustedContext": {"now": 1000, "verifiedApprovals": []},
+      "expected": {"decision": "DENY", "reason": "DELEGATION_EXCEEDED"}
+    },
+    {
+      "id": "MSI-07",
+      "description": "A separately verified approval permits an otherwise matching bounded write",
+      "request": {"actor": "agent-a", "capability": "documents", "operation": "write", "resource": "doc-1", "scope": "project-a", "delegationDepth": 0},
+      "policy": {"grants": [{"id": "GRANT-WRITE-A", "actor": "agent-a", "capability": "documents", "operation": "write", "resource": "doc-1", "scope": "project-a", "expiresAt": 2000, "maxDelegationDepth": 0, "requiresApproval": true}]},
+      "trustedContext": {"now": 1000, "verifiedApprovals": ["GRANT-WRITE-A"]},
+      "expected": {"decision": "ALLOW", "reason": "MATCHING_GRANT"}
+    },
+    {
+      "id": "MSI-08",
+      "description": "A request lacking a required target must fail closed",
+      "request": {"actor": "agent-a", "capability": "documents", "operation": "read", "scope": "project-a", "delegationDepth": 0},
+      "policy": {"grants": [{"id": "GRANT-READ-A", "actor": "agent-a", "capability": "documents", "operation": "read", "resource": "doc-1", "scope": "project-a", "expiresAt": 2000, "maxDelegationDepth": 0, "requiresApproval": false}]},
+      "trustedContext": {"now": 1000, "verifiedApprovals": []},
+      "expected": {"decision": "DENY", "reason": "INVALID_REQUEST"}
+    }
+  ]
+}
