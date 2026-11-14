@@ -1,0 +1,17 @@
+# Maskable.si — Maskable Superintelligence
+
+> Independent Sohadot proposal about boundaries for externally exercised AI capabilities. This project is a concept and educational reference, not a deployed or certified security product.
+
+## Canonical references
+
+- [Concept and interactive simulation](https://maskable.si/): Possession is not permission; 12 simulated capability permission states.
+- [Maskability operational definition v0.1](https://maskable.si/maskability/): Proposed scope, execution-boundary assumptions, decision contract, test cases, limitations, external research references and review contact.
+- [Machine-readable reference contract v0.1](https://maskable.si/maskability/contract.v0.1.json): Eight deterministic example test fixtures, with no real-world enforcement claims.
+
+## Important limitations
+
+- The `.si` extension denotes *Superintelligence* in this project's brand language; it is technically Slovenia's country-code top-level domain.
+- The interactive register modifies browser state only.
+- Reference tests exercise a local, illustrative decision function and cannot establish deployed safety, revocation, independent authentication or robustness against bypass.
+- M0–M4 is a proposed conceptual vocabulary, not an industry standard or certification.
+- Independent sources cited on the website do not endorse this proposal.

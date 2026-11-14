@@ -21,3 +21,5 @@ jobs:
           node-version: "22"
       - name: Run page and social-preview checks
         run: node tests/smoke.mjs
+      - name: Run illustrative Maskability reference contract checks
+        run: node tests/policy.mjs

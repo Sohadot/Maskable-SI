@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8f7f4">
+  <meta name="color-scheme" content="light">
+  <title>What Is Maskability? A Testable Definition for AI Capability Boundaries — Maskable.si</title>
+  <meta name="description" content="An operational definition of maskability for AI deployments: external capability scope, boundary enforcement, revocation, and independent evaluation. Proposed reference v0.1, with reproducible decision cases and explicit limitations.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://maskable.si/maskability/">
+  <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/styles.css">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Maskable Superintelligence">
+  <meta property="og:url" content="https://maskable.si/maskability/">
+  <meta property="og:title" content="Maskability: A Testable Definition for AI Capability Boundaries">
+  <meta property="og:description" content="Scope. Enforce. Revoke. Evaluate. A proposed operational reference with reproducible cases and explicit limits.">
+  <meta property="og:image" content="https://maskable.si/assets/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Maskable.si — Possession is not permission.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Maskability: A Testable Definition for AI Capability Boundaries">
+  <meta name="twitter:description" content="A proposed operational reference for permissioned AI action boundaries, with executable example cases.">
+  <meta name="twitter:image" content="https://maskable.si/assets/social-card.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Maskability: A Testable Definition for AI Capability Boundaries","description":"Proposed operational definition, threat boundary and illustrative evaluation contract for external AI capabilities.","url":"https://maskable.si/maskability/","version":"0.1","inLanguage":"en","author":{"@type":"Organization","name":"Sohadot","url":"https://sohadot.com"},"publisher":{"@type":"Organization","name":"Sohadot","url":"https://sohadot.com"},"isAccessibleForFree":true}</script>
+</head>
+<body class="reference-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header"><div class="container header-content">
+    <a class="brand" href="/" aria-label="Maskable.si home"><span class="mark" aria-hidden="true">M<span>.</span></span><span>MASKABLE.SI</span></a>
+    <nav class="nav" aria-label="Reference navigation"><a href="#definition">Definition</a><a href="#contract">Contract</a><a href="#cases">Test cases</a><a href="#limitations">Limits</a></nav>
+    <a class="header-inquire" href="/" aria-label="Return to main site">Back to thesis <span aria-hidden="true">↗</span></a>
+  </div></header>
+
+  <main id="main">
+    <section class="reference-hero container" aria-labelledby="reference-title">
+      <p class="eyebrow">MASKABLE / PUBLIC TECHNICAL REFERENCE / 0.1</p>
+      <h1 id="reference-title">Maskability is a property of the boundary<span class="orange">.</span><br>Not the model.</h1>
+      <p class="reference-lead">An AI system may be capable of taking an action without being authorized to take it. <strong>Maskability</strong> is our proposed name for a deployment's capacity to make that distinction operational, externally enforceable, and open to independent testing.</p>
+      <div class="reference-status"><span>STATUS / INDEPENDENT PROPOSAL</span><span>VERSION / 0.1</span><span>EVIDENCE / REFERENCE TESTS ONLY</span></div>
+    </section>
+
+    <section class="reference-section container" id="definition" aria-labelledby="definition-title">
+      <p class="section-number">01 — OPERATIONAL DEFINITION</p>
+      <h2 id="definition-title">What must be maskable?</h2>
+      <p><strong>Maskability</strong> is the degree to which a specified AI deployment can independently <strong>scope, enforce, revoke and evaluate</strong> access to its external capabilities through identifiable execution boundaries. A capability here is an actionable route to a tool, resource, credential, service or physical system—not the internal knowledge, reasoning or potential abilities of a model.</p>
+      <p>Any claim about maskability must identify the <strong>deployment and control perimeter</strong>, the actions that cross it, the authoritative policy source, and the evidence used to assess the boundary. A claim with no specified perimeter cannot be meaningfully tested.</p>
+      <div class="reference-grid">
+        <article><span>01 / SCOPE</span><h3>Constrain exposure</h3><p>Specify the actor, operation, capability, target, permitted scope and time window.</p></article>
+        <article><span>02 / ENFORCE</span><h3>Control execution</h3><p>Make a trusted boundary decide before external side effects are triggered.</p></article>
+        <article><span>03 / REVOKE &amp; EVALUATE</span><h3>Prove limits</h3><p>Demonstrate how authority is withdrawn and how unwanted actions are tested and recorded.</p></article>
+      </div>
+      <div class="reference-callout"><p><strong>Central proposition:</strong> possession of a capability does not imply permission to exercise it. This proposition becomes operational only where the execution path can actually be mediated.</p></div>
+    </section>
+
+    <section class="reference-section container" id="contract" aria-labelledby="contract-title">
+      <p class="section-number">02 — REFERENCE DECISION CONTRACT</p>
+      <h2 id="contract-title">An authority decision<br>has a shape.</h2>
+      <p>A testable decision needs more than a label reading “allowed.” This v0.1 reference accepts a request describing a principal, capability, operation, resource, scope and delegation depth. A separate trusted context supplies the time and any independently verified approval. A trusted policy document defines scoped grants and expiry.</p>
+      <div class="reference-split">
+        <div><h3>Three illustrative outcomes</h3><ul class="reference-list"><li><strong>DENY</strong> — absent, invalid, expired or mismatched authority. The reference logic defaults to denial.</li><li><strong>REVIEW</strong> — a matching grant requires verified external approval that has not yet been supplied.</li><li><strong>ALLOW</strong> — an exact matching grant permits the requested action in this illustrative policy model.</li></ul></div>
+        <div><h3>Trust assumptions</h3><ul class="reference-list"><li>Policy grants are supplied by a trusted authority, not written by the agent being evaluated.</li><li>Time and approval status are established independently of model output.</li><li>Every relevant external action reaches an actual enforcement point before execution.</li></ul></div>
+      </div>
+      <p class="reference-note">These assumptions are requirements for a real deployment; the example code does not establish or verify them. The reference function makes decisions about example objects. It does not intercept tools or persist audit evidence.</p>
+      <div class="reference-resources"><a href="/maskability/contract.v0.1.json">Machine-readable contract ↗</a><a href="https://github.com/Sohadot/Maskable-SI/blob/main/examples/reference-policy.mjs" target="_blank" rel="noopener noreferrer">Reference decision code ↗</a><a href="https://github.com/Sohadot/Maskable-SI/blob/main/tests/policy.mjs" target="_blank" rel="noopener noreferrer">Reproducible test runner ↗</a></div>
+    </section>
+
+    <section class="reference-section container" id="cases" aria-labelledby="cases-title">
+      <p class="section-number">03 — REPRODUCIBLE CASES</p>
+      <h2 id="cases-title">A claim should survive a counterexample.</h2>
+      <p>The following examples are intended as a transparent <strong>decision oracle</strong> for the narrow sample policy evaluator. They are not red-team results or measurements of a deployed AI system. Anyone can inspect the input fixtures, run the Node.js tests and propose adversarial cases.</p>
+      <div class="reference-table-wrap"><table class="reference-table"><thead><tr><th>ID</th><th>Question</th><th>Illustrative expectation</th></tr></thead><tbody>
+        <tr><th scope="row">MSI-01</th><td>Can an agent act when no scoped grant exists?</td><td>DENY / no grant</td></tr>
+        <tr><th scope="row">MSI-02</th><td>Does an exact grant authorize one bounded read?</td><td>ALLOW / matching scope</td></tr>
+        <tr><th scope="row">MSI-03</th><td>Does a grant for one project authorize another?</td><td>DENY / scope mismatch</td></tr>
+        <tr><th scope="row">MSI-04</th><td>Can an unapproved external write proceed?</td><td>REVIEW / verified approval needed</td></tr>
+        <tr><th scope="row">MSI-05</th><td>What happens after a grant expires?</td><td>DENY / expired</td></tr>
+        <tr><th scope="row">MSI-06</th><td>Can delegation exceed its authorized depth?</td><td>DENY / delegated elevation</td></tr>
+        <tr><th scope="row">MSI-07</th><td>Can separately verified approval release a bounded write?</td><td>ALLOW / verified approval</td></tr>
+        <tr><th scope="row">MSI-08</th><td>Does a malformed request fail closed?</td><td>DENY / invalid request</td></tr>
+      </tbody></table></div>
+      <p class="reference-note">The tests confirm the behavior of the local reference function only. They do not test tool interception, hostile runtimes, model obedience, revocation propagation, logging durability or real-world bypass resistance.</p>
+    </section>
+
+    <section class="reference-section container" id="limitations" aria-labelledby="limitations-title">
+      <p class="section-number">04 — THREAT BOUNDARY &amp; LIMITS</p>
+      <h2 id="limitations-title">An honest perimeter<br>is part of the design.</h2>
+      <div class="reference-split"><div><h3>Relevant failure modes</h3><ul class="reference-list"><li>A prompt or untrusted tool result induces an action beyond the task's permission scope.</li><li>A delegated agent acquires greater authority than its principal.</li><li>A stale grant remains usable after expiry or revocation.</li><li>An action path bypasses the designated enforcement point.</li><li>An approval is asserted by the requester rather than verified by an independent authority.</li></ul></div>
+      <div><h3>What v0.1 cannot establish</h3><ul class="reference-list"><li>No ability to erase, hide or suppress a model's internal knowledge or latent capacity.</li><li>No protection for tools or channels outside the measured control perimeter.</li><li>No guarantee against compromised identity, policy storage, runtime or enforcement components.</li><li>No independent security review, deployment, certification or claim of safe superintelligence.</li></ul></div></div>
+      <div class="reference-callout"><p><strong>Scope of current evidence:</strong> a published conceptual definition, a machine-readable example contract, and deterministic tests of a local decision function. Revocation and real enforcement remain <strong>unverified design obligations</strong>, not delivered features.</p></div>
+    </section>
+
+    <section class="reference-section container" id="sources" aria-labelledby="sources-title">
+      <p class="section-number">05 — CONTEXT, ATTRIBUTION &amp; REVIEW</p>
+      <h2 id="sources-title">Designed to be challenged.</h2>
+      <p>The proposal draws context from existing work; it does not replace, certify compliance with, or claim endorsement from these organizations. In particular, OWASP describes excessive agency risks in tool-enabled systems, NIST offers a broader AI risk-management framework, and the UK AI Security Institute calls for rigorous, independently assessed safeguards.</p>
+      <ul class="reference-list">
+        <li><a class="text-link" href="https://genai.owasp.org/llmrisk/llm062025-excessive-agency/" target="_blank" rel="noopener noreferrer">OWASP / LLM06:2025 Excessive Agency ↗</a></li>
+        <li><a class="text-link" href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener noreferrer">NIST / AI Risk Management Framework ↗</a></li>
+        <li><a class="text-link" href="https://www.aisi.gov.uk/research/principles-for-evaluating-misuse-safeguards-of-frontier-ai-systems" target="_blank" rel="noopener noreferrer">UK AISI / Safeguard Evaluation Principles ↗</a></li>
+      </ul>
+      <p><strong>Attribution:</strong> Maskability v0.1 is an independent proposal by Sohadot, published at Maskable.si. It is not an industry standard and does not claim to have originated the broader principles of least privilege, authorization or security mediation. M0–M4 on the <a class="text-link" href="/#levels">homepage</a> is a separate conceptual vocabulary, not a certification scale.</p>
+      <p>Concrete objections, suggested counterexamples and independent engineering reviews are welcome. Please include the specific claim, the boundary assumption you dispute and a reproducible scenario where possible.</p>
+      <div class="reference-resources"><a href="mailto:agent@sohadot.com?subject=Maskability%20v0.1%20technical%20review">Submit a technical critique ↗</a><a href="/">Return to the interactive concept ↗</a></div>
+    </section>
+  </main>
+  <footer class="footer reference-footer"><div class="container footer-inner"><a class="brand" href="/"><span class="mark" aria-hidden="true">M<span>.</span></span><span>MASKABLE.SI</span></a><span>PUBLIC REFERENCE 0.1 · INDEPENDENT PROPOSAL BY <a href="https://sohadot.com" target="_blank" rel="noopener noreferrer">SOHADOT</a></span><a href="mailto:agent@sohadot.com">CONTACT ↗</a></div></footer>
+</body>
+</html>
