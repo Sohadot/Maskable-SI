@@ -14,6 +14,7 @@ const robots = read("robots.txt").toString();
 const script = read("assets/app.js").toString();
 const readme = read("README.md").toString();
 const png = read("assets/social-card.png");
+const jpeg = read("assets/social-card-v2.jpg");
 
 for (const id of ["register", "capability-grid", "thesis", "model", "levels", "evidence", "preset-mask", "preset-scoped", "preset-reset"]) {
   assert.ok(home.includes('id="' + id + '"'), "Missing element " + id);
@@ -47,16 +48,42 @@ assert.equal(contract.status, "independent_proposal_not_standard");
 assert.doesNotMatch(reference + JSON.stringify(contract), /MaskableSI\.com/i);
 
 // Social platform unfurling: accessible HTTPS image with explicit 1200x630 PNG metadata.
-assert.match(home, /property="og:image" content="https:\/\/maskable\.si\/assets\/social-card\.png"/);
-assert.match(home, /property="og:image:type" content="image\/png"/);
+assert.match(home, /property="og:image" content="https:\/\/maskable\.si\/assets\/social-card-v2\.jpg"/);
+assert.match(home, /property="og:image:url" content="https:\/\/maskable\.si\/assets\/social-card-v2\.jpg"/);
+assert.match(home, /property="og:image:secure_url" content="https:\/\/maskable\.si\/assets\/social-card-v2\.jpg"/);
+assert.match(home, /property="og:image:type" content="image\/jpeg"/);
 assert.match(home, /property="og:image:width" content="1200"/);
 assert.match(home, /property="og:image:height" content="630"/);
 assert.match(home, /property="og:image:alt"/);
 assert.match(home, /name="twitter:card" content="summary_large_image"/);
-assert.match(home, /name="twitter:image" content="https:\/\/maskable\.si\/assets\/social-card\.png"/);
+assert.match(home, /name="twitter:image" content="https:\/\/maskable\.si\/assets\/social-card-v2\.jpg"/);
+assert.match(reference, /property="og:image" content="https:\/\/maskable\.si\/assets\/social-card-v2\.jpg"/);
+assert.match(reference, /property="og:image:type" content="image\/jpeg"/);
 assert.equal(png.readUInt32BE(16), 1200);
 assert.equal(png.readUInt32BE(20), 630);
 assert.equal(png.subarray(1, 4).toString(), "PNG");
+assert.equal(jpeg.readUInt16BE(0), 0xffd8);
+assert.equal(jpeg.readUInt16BE(jpeg.length - 2), 0xffd9);
+
+// Check the on-disk JPEG dimensions from its start-of-frame segment.
+function jpegDimensions(buffer) {
+  let cursor = 2;
+  while (cursor + 8 < buffer.length) {
+    if (buffer[cursor++] !== 0xff) continue;
+    while (buffer[cursor] === 0xff) cursor++;
+    const marker = buffer[cursor++];
+    if (marker === 0xd8 || marker === 0x01 || (marker >= 0xd0 && marker <= 0xd7)) continue;
+    if (marker === 0xd9 || marker === 0xda) break;
+    const length = buffer.readUInt16BE(cursor);
+    if (length < 2) throw new Error("Invalid JPEG segment length");
+    if ([0xc0, 0xc1, 0xc2, 0xc3].includes(marker)) {
+      return { height: buffer.readUInt16BE(cursor + 3), width: buffer.readUInt16BE(cursor + 5) };
+    }
+    cursor += length;
+  }
+  throw new Error("JPEG start-of-frame not found");
+}
+assert.deepEqual(jpegDimensions(jpeg), { width: 1200, height: 630 });
 
 // Acquisition remains informational and not indexed; escrow is strictly optional.
 assert.match(acquire, /noindex, follow/);
@@ -82,4 +109,4 @@ assert.deepEqual(applyPreset("reset"), DEFAULT);
 assert.equal(Object.keys(applyPreset("reset")).length, 12);
 assert.doesNotMatch(script, /fetch\s*\(|XMLHttpRequest|sendBeacon|localStorage|sessionStorage/);
 
-console.log("PASS: 12-capability register, social PNG metadata, noindex acquisition, optional escrow, local-only operation");
+console.log("PASS: 12-capability register, social JPEG metadata and dimensions, noindex acquisition, optional escrow, local-only operation");

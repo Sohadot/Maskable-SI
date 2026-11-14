@@ -32,7 +32,8 @@ Serve the project root via a static HTTP server, e.g. `python3 -m http.server 80
 - `examples/reference-policy.mjs`, `tests/policy.mjs` — demonstrative decision logic and executable tests
 - `assets/styles.css` — accessible responsive design
 - `assets/app.js` — browser-only interactive 12-capability register
-- `assets/social-card.svg` and `assets/social-card.png` — exact branded social preview graphic, 1200 × 630
+- `assets/social-card.svg` and `assets/social-card.png` — original branded social preview graphic, 1200 × 630
+- `assets/social-card-v2.jpg` — standard true-color JPEG of that same graphic, with a distinct URL for social re-fetch compatibility
 - `acquire/index.html` — separate, noindex strategic inquiries with optional independent escrow
 - `tests/smoke.mjs` — structural and behavior tests
 - `robots.txt`, `sitemap.xml` — homepage discovery, acquisition excluded
@@ -48,7 +49,7 @@ These references inform the concept but do not endorse it. The `.si` extension t
 
 ## Social preview behavior
 
-The homepage declares Open Graph and X/Twitter metadata with an **absolute HTTPS PNG URL**, dimensions, MIME type and alternative text. After the site and the PNG are publicly accessible at `maskable.si`, social platforms may fetch and cache this preview. Rendering varies by platform; setting metadata does not guarantee instant rich previews, and already-cached cards may require a recrawl.
+The homepage and reference page declare Open Graph and X/Twitter metadata with an **absolute HTTPS JPEG URL**, dimensions, MIME type and alternative text. The original PNG remains available; `social-card-v2.jpg` preserves its visual design while using a widely supported true-color format and a fresh URL. Social platforms may fetch and cache the new preview, but rendering varies by platform. Metadata cannot guarantee instant rich previews, and already-cached page cards may require a recrawl. WhatsApp also allows senders to disable link previews in their privacy settings; the site cannot override that choice.
 
 ## Optional escrow
 
